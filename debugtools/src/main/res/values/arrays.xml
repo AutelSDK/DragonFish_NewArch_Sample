@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="debug_index_arrays">
+        <item>LEFT_OR_MAIN</item>
+        <item>RIGHT</item>
+        <item>UP</item>
+        <item>UNKNOWN</item>
+    </string-array>
+
+    <string-array name="debug_sub_type_arrays" translatable="false">
+        <item>65534</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="debug_sub_index_arrays" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="debug_vision_image_arrays">
+        <item>Close</item>
+        <item>Front and rear vision correction</item>
+        <item>Up and down vision correction</item>
+        <item>Original Uncorrected</item>
+        <item>Left and Right vision correction</item>
+    </string-array>
+
+    <string-array name="debug_device_log_type" translatable="false">
+         <item>RC</item>
+         <item>DRONE</item>
+         <item>NEST</item>
+        <item>APP</item>
+    </string-array>
+
+    <string-array name="debug_stick_level">
+        <item>LowSpeed</item>
+        <item>Smooth</item>
+        <item>Standard</item>
+        <item>Ludicrous</item>
+    </string-array>
+    <string-array name="debug_stick_level_speed">
+        <item>Full:(Horizontal Speed) forward and backward 3, left and right 3, (Vertical speed) up and down 3, yam angle 90°</item>
+        <item>Full:(Horizontal Speed) forward and backward 10, left and right 10, (Vertical speed) up 5 and down 4, yam angle 90°</item>
+        <item>Full:(Horizontal Speed) forward and backward 15, left and right 10, (Vertical speed) up and down 6, yam angle 90°</item>
+        <item>Full:(Horizontal Speed) forward 23 backward 18, left and right 20, (Vertical speed) up and down 6, yam angle 120°</item>
+    </string-array>
+</resources>

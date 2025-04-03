@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="debug_index_arrays">
+        <item>左边或主要</item>
+        <item>右</item>
+        <item>向上</item>
+        <item>未知</item>
+    </string-array>
+    <string-array name="debug_vision_image_arrays">
+        <item>关闭</item>
+        <item>前后视矫正</item>
+        <item>上下视矫正</item>
+        <item>原始未矫正</item>
+        <item>左右视矫正</item>
+    </string-array>
+    <string-array name="debug_stick_level">
+        <item>低速档</item>
+        <item>舒适档</item>
+        <item>标准档</item>
+        <item>狂暴档</item>
+    </string-array>
+    <string-array name="debug_stick_level_speed">
+        <item>满杆量:（水平速度）前3后3，左右3，（垂直速度）上升3，下降3，偏航角90度</item>
+        <item>满杆量:（水平速度）前后10，左右10，（垂直速度）上升5，下降4，偏航角90度</item>
+        <item>满杆量:（水平速度）前后15，左右10，（垂直速度）上升6，下降6，偏航角90度</item>
+        <item>满杆量:（水平速度）前23后18，左右20，（垂直速度）上升6，下降6，偏航角120度</item>
+    </string-array>
+</resources>
