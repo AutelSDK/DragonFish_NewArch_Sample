@@ -931,4 +931,10 @@
     <!--Lidar Ranging-->
     <string name="debug_lidar_ranging_page">激光雷达测距</string>
     <string name="debug_lidar_ranging_description">演示如何使用激光雷达测距</string>
+
+    <string name="mission_write_file">转AUT</string>
+    <string name="mission_auto_check">自检</string>
+
+    <string name="debug_item_multi_video_surface_title">使用Surface显示解码视频</string>
+    <string name="debug_item_multi_video_surface_description">演示如何使用Surface显示解码视频</string>
 </resources>

@@ -3,14 +3,12 @@ package com.autel.drone.demo
 import android.app.Application
 import com.autel.drone.sdk.vmodelx.SDKInitConfig
 import com.autel.drone.sdk.vmodelx.SDKManager
-import com.autel.drone.sdk.vmodelx.SDKLogManager
 
 class DemoApplicationEx : Application() {
 
     override fun onCreate() {
         super.onCreate()
         //SDKManager.get().init(applicationContext, true)
-
 
         /**
          * MSDK init parameter setting
@@ -31,9 +29,7 @@ class DemoApplicationEx : Application() {
              * video render thread switch
              * if nest mode, can close render thread, Improve performance
              */
-            bRender = true 
-
-
+            bRender = true
 
             /**
              * handle log by implementation of IAutelLog
@@ -44,18 +40,20 @@ class DemoApplicationEx : Application() {
              * true : single mode , false: mesh mode
              * can auto config when sdk initialize, if not success ,you can manually config
              */
-            single = false
+            single = true
+
+            /**
+             * Whether DragonFish WiFi base station is supported
+             */
+            bSupportBaseStation = true
 
             /**
              * handle data storage by implementation of IAutelStorage
              */
             storage = null
-
         }
+
         SDKManager.get().init(applicationContext, sdkInitConfig)
-
-        SDKLogManager.get().setSDKLogPath(applicationContext)
-
         println("SDKManager V=${SDKManager.get().getSDKVersion()}")
     }
 }

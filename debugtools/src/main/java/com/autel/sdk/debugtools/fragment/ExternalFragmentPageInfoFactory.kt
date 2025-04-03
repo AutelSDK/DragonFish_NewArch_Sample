@@ -1,6 +1,5 @@
 package com.autel.sdk.debugtools.fragment
 
-import com.autel.drone.sdk.SDKConfig
 import com.autel.sdk.debugtools.R
 import com.autel.sdk.debugtools.activity.FragmentPageInfo
 import com.autel.sdk.debugtools.activity.FragmentPageInfoItem
@@ -26,6 +25,12 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
             R.string.debug_item_multi_video_decoding_description
         )
 
+        val surfaceVideo = audioVideoCenter.InnerFragmentPageInfoItem(
+            R.id.multi_video_with_surface_page,
+            R.string.debug_item_multi_video_surface_title,
+            R.string.debug_item_multi_video_surface_description
+        )
+
         val rtmpPage = audioVideoCenter.InnerFragmentPageInfoItem(
             R.id.livestream_page,
             R.string.debug_item_livestreaming_title,
@@ -43,6 +48,7 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
         )
         val avCenter = ArrayList<FragmentPageInfoItem.InnerFragmentPageInfoItem>()
         avCenter.add(multiDecoder)
+        avCenter.add(surfaceVideo)
         avCenter.add(rtmpPage)
         avCenter.add(rtspPage)
         avCenter.add(gb28181Page)
@@ -57,23 +63,6 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
                 )
             )
 
-            if(!SDKConfig.isSingle()){
-                items.add(
-                    FragmentPageInfoItem(
-                        R.id.net_mesh_demo_page,
-                        R.string.debug_item_net_mesh_demo_title,
-                        R.string.debug_item_net_mesh_demo_description
-                    )
-                )
-            }
-
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.virtual_stick_page,
-                    R.string.debug_item_virtual_stick_title,
-                    R.string.debug_item__virtual_stick_description
-                )
-            )
             items.add(
                 FragmentPageInfoItem(
                     R.id.media_page,
@@ -101,24 +90,6 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
                 )
             )
 
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.rtk_page,
-                    R.string.debug_rtk_title,
-                    R.string.debug_rtk_title_description
-                )
-            )
-
-
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.device_log,
-                    R.string.debug_device_log,
-                    R.string.debug_device_log_description
-                )
-            )
-
-
 
             items.add(
                 FragmentPageInfoItem(
@@ -136,29 +107,6 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
                 )
             )
 
-
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.perception_page,
-                    R.string.debug_perception_page,
-                    R.string.debug_perception_page_description
-                )
-            )
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.lte_page,
-                    R.string.debug_lte_page,
-                    R.string.debug_lte_page_description
-                )
-            )
-
-            items.add(
-                FragmentPageInfoItem(
-                    R.id.alarm_page,
-                    R.string.debug_alarm_page,
-                    R.string.debug_alarm_page_description
-                )
-            )
             items.add(
                 FragmentPageInfoItem(
                     R.id.lidar_rang_page,

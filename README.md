@@ -25,10 +25,10 @@ implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.3'
 implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 //event-bus
 implementation 'io.github.jeremyliao:live-event-bus-x:1.8.0'
-implementation rootProject.ext.deps.external.gson
-implementation rootProject.ext.deps.external.okhttp.core
+implementation 'com.google.code.gson:gson:2.8.8"
+implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 //room database
-implementation rootProject.ext.deps.external.database.room_ktx
+implementation 'androidx.room:room-ktx:2.4.2'
 
 implementation 'com.tencent:mmkv-static:1.2.8'
 ```

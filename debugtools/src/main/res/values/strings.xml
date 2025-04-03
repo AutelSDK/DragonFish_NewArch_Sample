@@ -939,4 +939,10 @@
     <!--Lidar Ranging-->
     <string name="debug_lidar_ranging_page">Lidar Ranging</string>
     <string name="debug_lidar_ranging_description">Lidar ganging sample code</string>
+
+    <string name="mission_write_file">Convert To AUT</string>
+    <string name="mission_auto_check">Pre-flight Check</string>
+
+    <string name="debug_item_multi_video_surface_title">Video Decoding With Surface</string>
+    <string name="debug_item_multi_video_surface_description">Demonstrate how to use the Multi-Video Decoding function with surface</string>
 </resources>
