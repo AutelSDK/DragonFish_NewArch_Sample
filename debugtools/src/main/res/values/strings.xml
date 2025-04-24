@@ -945,4 +945,7 @@
 
     <string name="debug_item_multi_video_surface_title">Video Decoding With Surface</string>
     <string name="debug_item_multi_video_surface_description">Demonstrate how to use the Multi-Video Decoding function with surface</string>
+
+    <string name="debug_wifi_list_page">Wifi Manager</string>
+    <string name="debug_wifi_list_description">Wifi base station connection sample code</string>
 </resources>

@@ -114,6 +114,14 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
                     R.string.debug_lidar_ranging_description
                 )
             )
+
+            items.add(
+                FragmentPageInfoItem(
+                    R.id.wifi_list_page,
+                    R.string.debug_wifi_list_page,
+                    R.string.debug_wifi_list_description
+                )
+            )
         }
     }
 }

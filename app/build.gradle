@@ -7,7 +7,36 @@ plugins {
 apply from: '../dependencies.gradle'
 apply from: '../mavenConfig.gradle'
 
+/**
+ * 获取key路径，创建一份方法来获取key文件路径，jenkins和studio中可使用不同的路径
+ * @return
+ */
+def getMyStoreFile() {
+    System.out.println("normal")
+    return file(project.APP_LOCAL_KEY_STORE)
+}
+
 android {
+
+    signingConfigs {
+        release {
+          /*  keyAlias project.APP_ALAIS
+            keyPassword project.APP_PSW
+            storeFile getMyStoreFile()
+            storePassword project.APP_STORE_PSW
+            v1SigningEnabled true
+            v2SigningEnabled true*/
+        }
+
+        debug {
+
+           /* keyAlias project.APP_ALAIS
+            keyPassword project.APP_PSW
+            soreFile getMyStoreFile()
+            storePassword project.APP_STORE_PSW*/
+        }
+    }
+
     compileSdkVersion rootProject.ext.versions.compileSdk
     packagingOptions {
         pickFirst 'lib/arm64-v8a/libjingle_peerconnection_so.so'
@@ -33,13 +62,13 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
         }
 
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
 

@@ -71,4 +71,9 @@
         android:id="@+id/lidar_rang_page"
         android:name="com.autel.sdk.debugtools.fragment.LidarRangingFragment"
         android:label="lidar_rang_page" />
+
+    <fragment
+        android:id="@+id/wifi_list_page"
+        android:name="com.autel.sdk.debugtools.fragment.WifiManagerFragment"
+        android:label="wifi_list_page" />
 </navigation>

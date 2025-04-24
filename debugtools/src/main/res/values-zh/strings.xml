@@ -937,4 +937,7 @@
 
     <string name="debug_item_multi_video_surface_title">使用Surface显示解码视频</string>
     <string name="debug_item_multi_video_surface_description">演示如何使用Surface显示解码视频</string>
+
+    <string name="debug_wifi_list_page">Wifi基站管理</string>
+    <string name="debug_wifi_list_description">演示如何连接到wifi基站</string>
 </resources>
