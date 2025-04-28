@@ -255,7 +255,9 @@
     <string name="debug_text_step_five">第五步</string>
     <string name="debug_text_step_six">第六步</string>
     <string name="debug_follow_instruction_below">按照以下说明操作</string>
-
+    <string name="setting_compass_step1">1、飞机水平放置，以Z轴为中心，顺时针旋转1周</string>
+    <string name="setting_compass_step2">2、机头朝下，以X轴为中心，顺时针旋转1周</string>
+    <string name="setting_compass_step3">3、将机右翼尖朝下，以Y轴为中心，水平顺时针旋转1周</string>
 
     <string name="debug_text_step_one_tips">折叠手臂并将飞机放在水平表面上</string>
     <string name="debug_text_step_two_tips">将飞行器旋转 180°，万向节朝上</string>

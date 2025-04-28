@@ -419,7 +419,7 @@ open class ScenerioTestFragment : AutelFragment(), IMTestClickListener,
     private fun setDataItems() {
         dataList.add(getString(R.string.debug_remote_controller_pairing))
         dataList.add(getString(R.string.debug_remote_controller_calibration))
-        dataList.add(getString(R.string.debug_imu_calibration))
+//        dataList.add(getString(R.string.debug_imu_calibration))
         dataList.add(getString(R.string.debug_compass_calibration))
         dataList.add(getString(R.string.debug_gimbal_calibration))
         dataList.add(getString(R.string.debug_photograph))
@@ -457,23 +457,23 @@ open class ScenerioTestFragment : AutelFragment(), IMTestClickListener,
                 binding.fragmentContainerView.visibility = View.GONE
             }
 
-            getString(R.string.debug_imu_calibration) -> {
-                // Disabling button till the cases are not available
-                binding.btExit.isEnabled = false
-                binding.resultRecyclerView.visibility = View.GONE
-                binding.msgTestContainer.visibility = View.GONE
-                binding.fragmentContainerView.visibility = View.VISIBLE
-                parentFragmentManager.commit {
-                    replace(
-                        binding.fragmentContainerView.id,
-                        ImuAndCompassCalibrationScenarioTest.newInstance(
-                            CalibrationTypeEnum.IMU,
-                            this@ScenerioTestFragment
-                        )
-                    )
-                    addToBackStack(null)
-                }
-            }
+//            getString(R.string.debug_imu_calibration) -> {
+//                // Disabling button till the cases are not available
+//                binding.btExit.isEnabled = false
+//                binding.resultRecyclerView.visibility = View.GONE
+//                binding.msgTestContainer.visibility = View.GONE
+//                binding.fragmentContainerView.visibility = View.VISIBLE
+//                parentFragmentManager.commit {
+//                    replace(
+//                        binding.fragmentContainerView.id,
+//                        ImuAndCompassCalibrationScenarioTest.newInstance(
+//                            CalibrationTypeEnum.IMU,
+//                            this@ScenerioTestFragment
+//                        )
+//                    )
+//                    addToBackStack(null)
+//                }
+//            }
 
             getString(R.string.debug_compass_calibration) -> {
                 // Disabling button till the cases are not available

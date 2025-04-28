@@ -7,14 +7,17 @@ import com.autel.drone.sdk.vmodelx.manager.DeviceManager
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.callback.CommonCallbacks
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.*
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.base.KeyTools
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.dragonfish.DFCommonCmdKey
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.camera.bean.RecordParametersBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.camera.bean.TakePhotoParametersBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.bean.CalibrationCommandBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.bean.CalibrationEventBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.bean.CalibrationScheduleBean
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.bean.DroneKeyInfoLFNtfyBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationEventEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationTypeEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CmdEnum
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.dragonfish.bean.enums.DFCalibrateCompassStatus
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.gimbal.bean.DroneGimbalStateBean
 import com.autel.sdk.debugtools.helper.KeyManagerCoroutineWrapper
 import com.autel.sdk.debugtools.helper.SdkFailureResultException
@@ -208,26 +211,52 @@ class ScenarioVM : AutelViewModel() {
 
             viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
                 onError.invoke(throwable)
-                cancelAllListener()
             }) {
                 val key = KeyTools.createKey(CommonKey.KeyDroneCalibrationCommand)
                 KeyManagerCoroutineWrapper.performAction(
-                    getKeyManager()!!,
+                    keyManager,
                     key,
                     CalibrationCommandBean(calType, CmdEnum.START)
                 )
                 onSuccess.invoke(true)
-                cancelAllListener()
             }
         }
+    }
+
+    fun startCompassCalibration(onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) {
+        currentCalType = CalibrationTypeEnum.COMPASS
+        val keyManager = getKeyManager()
+        if (keyManager == null) {
+            onError.invoke(SdkDeviceNonExistException())
+        } else {
+            listenDroneInfo()
+            viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+                onError.invoke(throwable)
+                cancelListenDroneInfo()
+            }) {
+                val key = KeyTools.createKey(DFCommonCmdKey.KeyStartCompassCalibrate)
+                KeyManagerCoroutineWrapper.performAction(keyManager, key, null)
+                onSuccess.invoke(true)
+                cancelListenDroneInfo()
+            }
+        }
+    }
+
+    private fun listenDroneInfo() {
+        val key = KeyTools.createKey(CommonKey.KeyDroneLfNtfy)
+        getKeyManager()?.listen(key, listenDroneKeyInfo)
+    }
+
+    private fun cancelListenDroneInfo() {
+        val key = KeyTools.createKey(CommonKey.KeyDroneLfNtfy)
+        getKeyManager()?.cancelListen(key, listenDroneKeyInfo)
     }
 
     private fun cancelAllListener() {
         cancelListenCalibrationStatus()
         cancelListenCalibrationStep()
-        if (currentCalType == CalibrationTypeEnum.GIMBAL_ANGLE) {
-            cancelListenHeatBeat()
-        }
+        cancelListenHeatBeat()
+        cancelListenDroneInfo()
     }
 
     /**
@@ -284,11 +313,23 @@ class ScenarioVM : AutelViewModel() {
         }
     }
 
+    private val listenDroneKeyInfo = object : CommonCallbacks.KeyListener<DroneKeyInfoLFNtfyBean> {
+        override fun onValueChange(oldValue: DroneKeyInfoLFNtfyBean?, newValue: DroneKeyInfoLFNtfyBean) {
+            SDKLog.d(TAG, "status ===========>>$newValue")
+            if (_compassStep.value != newValue.getDFHeartBeanInfo().getCompassStatus()) {
+                _compassStep.value = newValue.getDFHeartBeanInfo().getCompassStatus()
+            }
+        }
+    }
+
     /**
      * Calibration steps
      */
     private val _calibrationStep = MutableLiveData<CalibrationScheduleBean>()
     val calibrationStep: MutableLiveData<CalibrationScheduleBean> = _calibrationStep
+
+    private val _compassStep = MutableLiveData<DFCalibrateCompassStatus>()
+    val compassStep: MutableLiveData<DFCalibrateCompassStatus> = _compassStep
 
 
     /**
@@ -323,5 +364,10 @@ class ScenarioVM : AutelViewModel() {
                 }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelAllListener()
     }
 }

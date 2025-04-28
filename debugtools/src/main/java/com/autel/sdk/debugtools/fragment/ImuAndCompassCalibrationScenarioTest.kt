@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.autel.drone.sdk.vmodelx.device.DroneType
 import com.autel.drone.sdk.vmodelx.manager.DeviceManager
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationEventEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationTypeEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CompassCalibrationStepEnum
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.dragonfish.bean.enums.DFCalibrateCompassStatus
 import com.autel.sdk.debugtools.R
 import com.autel.sdk.debugtools.ScenarioVM
 import com.autel.sdk.debugtools.databinding.FragmentImuCalibrationScenarioTestBinding
@@ -70,10 +72,10 @@ class ImuAndCompassCalibrationScenarioTest : Fragment() {
         scenarioVM.calibrationStatus.observe(viewLifecycleOwner) {
             when (it) {
                 CalibrationEventEnum.START -> {
-                    if (type == CalibrationTypeEnum.COMPASS)
-                        calInStep(CompassCalibrationStepEnum.STEP1)
-                    else
-                        imuNextStep(1, 0)
+//                    if (type == CalibrationTypeEnum.COMPASS)
+//                        calInStep(CompassCalibrationStepEnum.STEP1)
+//                    else
+//                        imuNextStep(1, 0)
                 }
                 CalibrationEventEnum.SUCCESS -> {
                     allStateSucceeded()
@@ -97,15 +99,26 @@ class ImuAndCompassCalibrationScenarioTest : Fragment() {
                 }
             }
         }
-        scenarioVM.calibrationStep.observe(viewLifecycleOwner) {
-            if (it.calibrationType == CalibrationTypeEnum.IMU) {
-                imuNextStep(it.imcStep.value, 0)
-            }
-            if (it.calibrationType == CalibrationTypeEnum.COMPASS) {
-                calInStep(it.compassStep)
+
+        scenarioVM.compassStep.observe(viewLifecycleOwner) {
+            when (it) {
+                DFCalibrateCompassStatus.START_HORIZONTAL -> {
+                    binding.calibrateInstruction.text = getString(R.string.debug_follow_instruction_below)
+                    binding.calibratePositionText.text = getString(R.string.setting_compass_step2)
+                    binding.calibratePositionImage.setImageResource(R.drawable.ic_compass_calibrate_x)
+                }
+
+                DFCalibrateCompassStatus.START_VERTICAL -> {
+                    binding.calibrateInstruction.text = getString(R.string.debug_follow_instruction_below)
+                    binding.calibratePositionText.text = getString(R.string.setting_compass_step3)
+                    binding.calibratePositionImage.setImageResource(R.drawable.ic_compass_calibrate_y)
+                }
+
+                DFCalibrateCompassStatus.FAILED -> calibrationFailed()
+                DFCalibrateCompassStatus.SUCCESS -> allStateSucceeded()
+                else -> {}
             }
         }
-
     }
 
     /**
@@ -193,7 +206,7 @@ class ImuAndCompassCalibrationScenarioTest : Fragment() {
                 preformAction.showToast(getString(R.string.debug_text_step_no_gps))
                 return
             }
-            scenarioVM.startCalibration(CalibrationTypeEnum.COMPASS, {
+            scenarioVM.startCompassCalibration({
                 if (!it) {
                     calibrationFailed()
                 }

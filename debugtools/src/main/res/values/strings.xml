@@ -255,6 +255,9 @@
     <string name="debug_text_step_five">Step five</string>
     <string name="debug_text_step_six">Step six</string>
     <string name="debug_follow_instruction_below">Follow the instructions below</string>
+    <string name="setting_compass_step1">1. Place the aircraft horizontally on a level surface, take the z-axis as the center and rotate 1 circle clockwise</string>
+    <string name="setting_compass_step2">2. Hold the aircraft with nose face down, take the X-axis as the center and rotate 1 circle clockwise</string>
+    <string name="setting_compass_step3">3. Hold the aircraft with the right wing tip face down, take the Y-axis as the center and rotate 1 circle horizontally clockwise</string>
 
 
     <string name="debug_text_step_one_tips">Fold the arms in and lay the aircraft on a leveled surface</string>

@@ -1,8 +1,8 @@
-# MSDK V2.6
+## MSDK V2.6
 
 [中文版本](README_zhCN.md)
 
-# Overview
+### Overview
 
 This project demonstrates how to develop Android Apps using Autel's SDK V2.6 to control Autel DragonFish series drones. MSDK V2.6 provides hardware control interfaces and software service interfaces for DragonFish series drones, offering fully open-source production-level sample code and comprehensive tutorials. This enables developers to create competitive drone mobile solutions, greatly improving development experience and efficiency.
 
@@ -42,7 +42,7 @@ The current version supports [all DragonFish series drones](https://www.autelrob
     </tr>
 </table>
 
-## Dependencies
+### Dependencies
 
 Besides MSDK, the following dependencies are required:
 
@@ -64,7 +64,7 @@ implementation 'androidx.room:room-ktx:2.4.2'
 implementation 'com.tencent:mmkv-static:1.2.8'
 ```
 
-## Feature List
+### Feature List
 
 MSDK supports but is not limited to the following features:
 
