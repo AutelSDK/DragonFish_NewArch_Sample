@@ -1,5 +1,5 @@
 <resources>
-    <string name="debug_testing_tools">Debug\nTools</string>
+    <string name="debug_testing_tools">Debug Tools</string>
 
     <string name="debug_btn_init_msdk">Init MSDK</string>
     <string name="debug_btn_unInit_msdk">UnInit MSDK</string>
@@ -950,4 +950,15 @@
 
     <string name="debug_wifi_list_page">Wifi Manager</string>
     <string name="debug_wifi_list_description">Wifi base station connection sample code</string>
+
+    <string name="debug_btn_register_listener">Register Listener</string>
+    <string name="debug_btn_unregister_listener">Unregister Listener</string>
+    <string name="debug_btn_get_frequency">Get Frequency</string>
+    <string name="debug_btn_set_frequency">Set Frequency</string>
+    <string name="debug_frequency_band_title">Frequency Band Details</string>
+    <string name="debug_country_code">Country Code：%s</string>
+    <string name="debug_support_frequency_list">Supported Frequency Band：%s</string>
+    <string name="debug_current_frequency_band">Current Frequency Band：%s</string>
+    <string name="debug_btn_clear_log">Clear Log</string>
+    <string name="debug_btn_reset_country_code">Reset Country Code</string>
 </resources>

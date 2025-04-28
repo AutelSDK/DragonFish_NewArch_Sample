@@ -942,4 +942,15 @@
 
     <string name="debug_wifi_list_page">Wifi基站管理</string>
     <string name="debug_wifi_list_description">演示如何连接到wifi基站</string>
+
+    <string name="debug_btn_register_listener">注册监听</string>
+    <string name="debug_btn_unregister_listener">注销监听</string>
+    <string name="debug_btn_get_frequency">获取频段</string>
+    <string name="debug_btn_set_frequency">设置频段</string>
+    <string name="debug_frequency_band_title">合规频段详情</string>
+    <string name="debug_country_code">国家码：%s</string>
+    <string name="debug_support_frequency_list">支持合规频段：%s</string>
+    <string name="debug_current_frequency_band">当前频段：%s</string>
+    <string name="debug_btn_clear_log">清空日志</string>
+    <string name="debug_btn_reset_country_code">重置国家码</string>
 </resources>

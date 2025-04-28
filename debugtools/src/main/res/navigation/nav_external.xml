@@ -76,4 +76,14 @@
         android:id="@+id/wifi_list_page"
         android:name="com.autel.sdk.debugtools.fragment.WifiManagerFragment"
         android:label="wifi_list_page" />
+
+    <fragment
+        android:id="@+id/fly_zone_page"
+        android:name="com.autel.sdk.debugtools.fragment.FlyZoneFragment"
+        android:label="fly_zone_page" />
+
+    <fragment
+        android:id="@+id/frequency_band_page"
+        android:name="com.autel.sdk.debugtools.fragment.FrequencyBandFragment"
+        android:label="frequency_band_page" />
 </navigation>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/debug_gray">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_frequency_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/debug_common_color_0061CB"
+        android:orientation="vertical"
+        android:padding="@dimen/debug_dimen_dp_12"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_frequency_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_frequency_band_title"
+            android:textColor="@color/debug_white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_country_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/debug_dimen_dp_6"
+            android:text="@string/debug_country_code"
+            android:textColor="@color/debug_white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_support_frequency_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/debug_dimen_dp_6"
+            android:text="@string/debug_support_frequency_list"
+            android:textColor="@color/debug_white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_current_frequency_band"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/debug_dimen_dp_6"
+            android:text="@string/debug_current_frequency_band"
+            android:textColor="@color/debug_white"
+            android:textSize="16sp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_operation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/debug_dimen_dp_12"
+        android:layout_marginTop="@dimen/debug_dimen_dp_12"
+        app:layout_constraintTop_toBottomOf="@+id/layout_frequency_details">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_register_listener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_btn_register_listener" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_unregister_listener"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/debug_dimen_dp_12"
+            android:text="@string/debug_btn_unregister_listener" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_get_curr_frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/debug_dimen_dp_12"
+            android:text="@string/debug_btn_get_frequency" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_set_curr_frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/debug_dimen_dp_12"
+            android:text="@string/debug_btn_set_frequency" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_reset_countrycode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/debug_dimen_dp_12"
+            android:text="@string/debug_btn_reset_country_code"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_clear_log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/debug_btn_clear_log" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="@dimen/debug_dimen_dp_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_operation">
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/debug_white"
+            tools:text="result" />
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

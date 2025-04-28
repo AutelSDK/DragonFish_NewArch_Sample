@@ -122,6 +122,22 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
                     R.string.debug_wifi_list_description
                 )
             )
+
+            items.add(
+                FragmentPageInfoItem(
+                    R.id.fly_zone_page,
+                    R.string.debug_item_fly_zone_title,
+                    R.string.debug_item_fly_zone_description
+                )
+            )
+
+            items.add(
+                FragmentPageInfoItem(
+                    R.id.frequency_band_page,
+                    R.string.debug_frequency_band_page,
+                    R.string.debug_frequency_band_page_description
+                )
+            )
         }
     }
 }
