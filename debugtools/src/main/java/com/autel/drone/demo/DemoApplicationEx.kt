@@ -3,8 +3,6 @@ package com.autel.drone.demo
 import android.app.Application
 import android.net.wifi.WifiInfo
 import android.util.Log
-import com.autel.drone.sdk.log.ILog
-import com.autel.drone.sdk.log.SDKLog
 import com.autel.drone.sdk.vmodelx.SDKInitConfig
 import com.autel.drone.sdk.vmodelx.SDKManager
 import com.autel.drone.sdk.vmodelx.interfaces.IAutelLog
@@ -88,6 +86,11 @@ class DemoApplicationEx : Application() {
      * Wifi base station connect setting
      */
     private fun initWifiBaseStation(){
+        if (!supportBetaWifi()) {
+            println("App init not support BetaWifiManager")
+            return
+        }
+
         BetaWifiManager.get().addListener(object : IBetaWifiListener {
 
             override fun wifiConnect(connect: Boolean, wifiInfo: WifiInfo?) {
@@ -101,10 +104,19 @@ class DemoApplicationEx : Application() {
             override fun wifiRssi(rssi: Int, connectState: Int) {
                 println("App init wifiRssi rssi=$rssi, connectState=$connectState")
             }
-
         })
+
         BetaWifiManager.get().setAutoConnect(true)
         BetaWifiManager.get().startScan()
         println("App init start BetaWifiManager")
+    }
+
+    private fun supportBetaWifi(): Boolean {
+        return try {
+            Class.forName("android.net.vci.VciManager")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
     }
 }

@@ -7,37 +7,44 @@
     android:paddingHorizontal="@dimen/debug_dimen_dp_12"
     android:paddingTop="@dimen/debug_dimen_dp_12">
 
+    <LinearLayout
+        android:id="@+id/layout_lens"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LensType：" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="@dimen/debug_dimen_dp_150"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_start_recognize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/debug_dimen_dp_32"
         android:text="Start Recognize"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_lens"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/lens_type"
+    <Button
+        android:id="@+id/btn_start_lock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/debug_dimen_dp_32"
-        android:layout_marginTop="@dimen/debug_dimen_dp_8"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@id/btn_start_recognize"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-            android:id="@+id/rb_visible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Visible" />
-
-        <RadioButton
-            android:id="@+id/rb_infrared"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Infrared" />
-    </RadioGroup>
+        android:text="Target Lock"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_recognize"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_result"
@@ -46,5 +53,16 @@
         android:layout_marginTop="@dimen/debug_dimen_dp_15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_start_recognize" />
+
+    <LinearLayout
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/debug_dimen_dp_8"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_result" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

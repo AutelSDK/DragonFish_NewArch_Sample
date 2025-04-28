@@ -25,7 +25,10 @@ import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.Calibrati
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationTypeEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.GimbalCalState
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.RcDirectionEnum
-import com.autel.sdk.debugtools.*
+import com.autel.sdk.debugtools.R
+import com.autel.sdk.debugtools.ScenarioTestResultDataModel
+import com.autel.sdk.debugtools.ScenarioTestResultStatusEnum
+import com.autel.sdk.debugtools.ScenarioVM
 import com.autel.sdk.debugtools.adapter.ScenarioAdapter
 import com.autel.sdk.debugtools.adapter.TestCaseResultAdapter
 import com.autel.sdk.debugtools.databinding.FragmentScenerioTestsBinding
@@ -35,7 +38,7 @@ import com.autel.sdk.debugtools.uploadMsg.DebugToolUploadMsgManager
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 /**
  * scenario testing fragment for drone and rcPad
@@ -418,8 +421,8 @@ open class ScenerioTestFragment : AutelFragment(), IMTestClickListener,
         dataList.add(getString(R.string.debug_remote_controller_calibration))
         dataList.add(getString(R.string.debug_imu_calibration))
         dataList.add(getString(R.string.debug_compass_calibration))
-        dataList.add(getString(R.string.debug_photograph))
         dataList.add(getString(R.string.debug_gimbal_calibration))
+        dataList.add(getString(R.string.debug_photograph))
         dataList.add(getString(R.string.debug_videography))
     }
 

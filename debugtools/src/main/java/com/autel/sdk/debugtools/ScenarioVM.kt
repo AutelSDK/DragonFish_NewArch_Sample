@@ -15,6 +15,7 @@ import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.bean.Calibratio
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationEventEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CalibrationTypeEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.common.enums.CmdEnum
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.gimbal.bean.DroneGimbalStateBean
 import com.autel.sdk.debugtools.helper.KeyManagerCoroutineWrapper
 import com.autel.sdk.debugtools.helper.SdkFailureResultException
 import com.autel.sdk.debugtools.uploadMsg.SdkDeviceNonExistException
@@ -195,14 +196,19 @@ class ScenarioVM : AutelViewModel() {
      */
     fun startCalibration(calType: CalibrationTypeEnum, onSuccess: (Boolean) -> Unit, onError: (Throwable) -> Unit) {
         currentCalType = calType
-        listenCalibrationStatus()
-        listenCalibrationStep()
         val keyManager = getKeyManager()
         if (keyManager == null) {
             onError.invoke(SdkDeviceNonExistException())
         } else {
+            listenCalibrationStatus()
+            listenCalibrationStep()
+            if (calType == CalibrationTypeEnum.GIMBAL_ANGLE) {
+                listenHeatBeat()
+            }
+
             viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
                 onError.invoke(throwable)
+                cancelAllListener()
             }) {
                 val key = KeyTools.createKey(CommonKey.KeyDroneCalibrationCommand)
                 KeyManagerCoroutineWrapper.performAction(
@@ -211,7 +217,16 @@ class ScenarioVM : AutelViewModel() {
                     CalibrationCommandBean(calType, CmdEnum.START)
                 )
                 onSuccess.invoke(true)
+                cancelAllListener()
             }
+        }
+    }
+
+    private fun cancelAllListener() {
+        cancelListenCalibrationStatus()
+        cancelListenCalibrationStep()
+        if (currentCalType == CalibrationTypeEnum.GIMBAL_ANGLE) {
+            cancelListenHeatBeat()
         }
     }
 
@@ -223,12 +238,32 @@ class ScenarioVM : AutelViewModel() {
         getKeyManager()?.listen(key, listenCalibrationStatus)
     }
 
+    private fun cancelListenCalibrationStatus() {
+        val key = KeyTools.createKey(CommonKey.KeyDroneCalibrationEventNtfy)
+        getKeyManager()?.cancelListen(key, listenCalibrationStatus)
+    }
+
     /**
      * Listen for calibration steps
      */
     private fun listenCalibrationStep() {
         val key = KeyTools.createKey(CommonKey.KeyDroneCalibrationScheduleNtfy)
         getKeyManager()?.listen(key, listenCalibrationStep)
+    }
+
+    private fun cancelListenCalibrationStep() {
+        val key = KeyTools.createKey(CommonKey.KeyDroneCalibrationScheduleNtfy)
+        getKeyManager()?.cancelListen(key, listenCalibrationStep)
+    }
+
+    private fun listenHeatBeat() {
+        val key = KeyTools.createKey(GimbalKey.KeyHeatBeat)
+        getKeyManager()?.listen(key, heartBeatNotify)
+    }
+
+    private fun cancelListenHeatBeat() {
+        val key = KeyTools.createKey(GimbalKey.KeyHeatBeat)
+        getKeyManager()?.cancelListen(key, heartBeatNotify)
     }
 
     /**
@@ -269,4 +304,24 @@ class ScenarioVM : AutelViewModel() {
         }
     }
 
+    private val heartBeatNotify = object : CommonCallbacks.KeyListener<DroneGimbalStateBean> {
+        override fun onValueChange(
+            oldValue: DroneGimbalStateBean?,
+            newValue: DroneGimbalStateBean
+        ) {
+            if (_calibrationStep.value?.calibrationPercent != newValue.gimbalCalibratePercent) {
+                val value = _calibrationStep.value
+                value?.let {
+                    _calibrationStep.value =
+                        CalibrationScheduleBean(
+                            it.imcStep,
+                            it.compassStep,
+                            it.gimbalStep,
+                            newValue.gimbalCalibratePercent,
+                            it.calibrationType
+                        )
+                }
+            }
+        }
+    }
 }
