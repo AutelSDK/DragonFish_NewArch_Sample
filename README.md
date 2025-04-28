@@ -6,30 +6,61 @@
 
 This project demonstrates how to develop Android Apps using Autel's SDK V2.6 to control Autel DragonFish series drones. MSDK V2.6 provides hardware control interfaces and software service interfaces for DragonFish series drones, offering fully open-source production-level sample code and comprehensive tutorials. This enables developers to create competitive drone mobile solutions, greatly improving development experience and efficiency.
 
-The current version supports [all DragonFish series drones](https://www.autelrobotics.cn/productdetail/dragonfish-series-drones/), including:
+The current version supports [all DragonFish series drones](https://www.autelrobotics.cn/productdetail/dragonfish-series-drones/), product and firmware version are listed as follows:
 
-* DragonFish Standard (7kg)
-* DragonFish Pro (15kg)
+#### Supported Product List and Firmware Version
+<table>
+    <tr>
+        <td><strong>Product</strong></td>
+        <td><strong>Firmware Version</strong></td>
+    </tr>
+    <tr>
+        <td rowspan="4">DragonFish Standard (7kg)</td>
+        <td>UAV: V12.0.1.115</td>
+    </tr>
+    <tr>
+        <td>RC: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td>WiFi Station: V11.0.1.115</td>
+    </tr>
+    <tr>
+        <td>TraceAnt: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td rowspan="4">DragonFish Pro (15kg)</td>
+        <td>UAV: V13.0.0.115</td>
+    </tr>
+    <tr>
+        <td>RC: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td>WiFi Station: V11.0.1.115</td>
+    </tr>
+    <tr>
+        <td>TraceAnt: V1.0.1.115</td>
+    </tr>
+</table>
 
 ## Dependencies
 
 Besides MSDK, the following dependencies are required:
-```js
+
+```groovy
 //okhttp and retrofit
+implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.3'
 implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-//event-bus
-implementation 'io.github.jeremyliao:live-event-bus-x:1.8.0'
-implementation 'com.google.code.gson:gson:2.8.8"
-implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+implementation 'com.google.code.gson:gson:2.8.8'
+//protobuf
+implementation 'com.google.protobuf:protobuf-javalite:3.21.12'
 //room database
 implementation 'androidx.room:room-ktx:2.4.2'
-
+//mmkv
 implementation 'com.tencent:mmkv-static:1.2.8'
 ```
 

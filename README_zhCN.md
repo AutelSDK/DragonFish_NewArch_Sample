@@ -1,40 +1,69 @@
-# MSDK V2.6版本
+## MSDK V2.6版本
 
 [English Version](README.md)
 
-# 概述
+### 概述
 
 本项目主要是展示如何使用道通公司提供的SDK V2.6来开发Android App，来控制道通龙鱼系列无人机。MSDK V2.6拥有可以控制龙鱼系列无人机硬件控制接口和软件服务接口，开放全开源的生产代码级Sample和丰富的教程，为开发者提供了具有竞争力的无人机移动端解决方案，极大的提升开发体验和效率。
 
-当前版本支持[龙鱼全系列无人机](https://www.autelrobotics.cn/productdetail/dragonfish-series-drones/)， 包括：
+当前版本支持[龙鱼全系列无人机](https://www.autelrobotics.cn/productdetail/dragonfish-series-drones/)， 产品和对应的固件版本已列在下面：
 
-* 龙鱼标准版(7kg)
+#### 支持产品列表和固件版本
+<table>
+    <tr>
+        <td><strong>产品</strong></td>
+        <td><strong>固件版本</strong></td>
+    </tr>
+    <tr>
+        <td rowspan="4">龙鱼标准版(7kg)</td>
+        <td>无人机: V12.0.1.115</td>
+    </tr>
+    <tr>
+        <td>遥控器: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td>WiFi基站: V11.0.1.115</td>
+    </tr>
+    <tr>
+        <td>追踪天线: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td rowspan="4">龙鱼Pro版(15kg)</td>
+        <td>无人机: V13.0.0.115</td>
+    </tr>
+    <tr>
+        <td>遥控器: V1.0.1.115</td>
+    </tr>
+    <tr>
+        <td>WiFi基站: V11.0.1.115</td>
+    </tr>
+    <tr>
+        <td>追踪天线: V1.0.1.115</td>
+    </tr>
+</table>
 
-* 龙鱼Pro版(15kg)
-
-## 依赖
+### 依赖
 
 除MSDK外，还需要添加一下依赖
-```js
-//okhttp和retrofit
+```groovy
+//okhttp and retrofit
+implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.3'
 implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-//event-bus
-implementation 'io.github.jeremyliao:live-event-bus-x:1.8.0'
-implementation 'com.google.code.gson:gson:2.8.8"
-implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-//room数据库
+implementation 'com.google.code.gson:gson:2.8.8'
+//protobuf
+implementation 'com.google.protobuf:protobuf-javalite:3.21.12'
+//room database
 implementation 'androidx.room:room-ktx:2.4.2'
-
+//mmkv
 implementation 'com.tencent:mmkv-static:1.2.8'
 ```
 
-## 功能列表
+### 功能列表
 
 MSDK支持包括但不限于一下功能：
 

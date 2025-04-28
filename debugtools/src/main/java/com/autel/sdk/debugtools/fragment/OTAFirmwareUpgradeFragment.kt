@@ -159,6 +159,11 @@ class OTAFirmwareUpgradeFragment : AutelFragment() {
             testDroneUpgrade()
         }
 
+        binding.btnStationEnterUpgrade.setOnClickListener {
+            showLog(">>click btnStationEnterUpgrade")
+            testWifiStationUpgrade()
+        }
+
         binding.btnEnterUpgade.setOnClickListener {
             showLog(">>click btnEnterUpgade")
             OTAUpgradeManger.getInstance().switchUpgradeMode(true)
@@ -270,6 +275,51 @@ class OTAFirmwareUpgradeFragment : AutelFragment() {
         gndUpgradeManager?.startUpgradeFlow(File(gndFilePath), null)
     }
 
+
+    /**
+     * Upgrade remoter firmware
+     */
+    private fun testWifiStationUpgrade() {
+        val gndFilePath = "/mnt/media_rw/sdcard1/GroundStation.WIFI-V11.0.1.95-20250319084221.Encrypt.uav"
+        val deviceId = DeviceManager.getDeviceManager().getBaseStationDevice()?.deviceNumber() ?: return
+        var gndUpgradeManager: IUpgradeManager? =
+            UpgradeManager(deviceId).init(UpgradeClientTypeEnum.CLIENT_BASE_STATION)
+
+        gndUpgradeManager?.registerUpgradeListener(object : UpgradeListener {
+
+            override fun onUpgradeFlowChange(deviceId: Int, flowState: UpgradeFlowEnum) {
+                showLog("onUpgradeFlowChange $flowState")
+            }
+
+            override fun onUpgradeStateChange(deviceId: Int, state: UpgradeErrorStateEnum) {
+                showLog("onUpgradeStateChange $state")
+                gndUpgradeManager?.unInit()
+                gndUpgradeManager = null
+            }
+
+            override fun onUploadPackageProgress(
+                deviceId: Int,
+                totalLength: Long,
+                sendLength: Long,
+                progress: Int,
+                speed: Long
+            ) {
+                showLog("onUploadPackageProgress $progress")
+            }
+
+            override fun onUpgradeProgress(deviceId: Int, progress: Int) {
+                showLog("onUpgradeProgress $progress")
+                binding.speedText.text = "onUpgradeProgress $progress%"
+            }
+
+            override fun onUpgradeResult(deviceId: Int, resultBean: UpgradeResultBean) {
+                showLog("onUpgradeResult $resultBean")
+                gndUpgradeManager?.unInit()
+                gndUpgradeManager = null
+            }
+        })
+        gndUpgradeManager?.startUpgradeFlow(File(gndFilePath), null)
+    }
 
     private fun downloadTest() {
         val path =
