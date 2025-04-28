@@ -18,31 +18,24 @@ import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.dragonfish.bean.WifiBa
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.dragonfish.bean.enums.AutoCheckTypeEnum
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.flight.bean.DroneSystemStateLFNtfyBean
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.flight.enums.AutoCheckStateEnum
+import com.autel.sdk.df.autocheck.AutoCheckListener
+import com.autel.sdk.df.autocheck.AutoCheckManager
 
 
 class PreFlightCheckHelper(private val context: Context, private val onResult: (Int) -> Unit) {
 
     companion object {
         private const val TAG = "PreFlightCheckHelper"
-
         const val CHECK_SUCCESS = 0
         const val CHECK_FAIL = -1
     }
 
-    private val keyLFNtfy = KeyTools.createKey(CommonKey.KeyDroneSystemStatusLFNtfy)
     private val stationStatusNtfy = KeyTools.createKey(WifiBaseStationKey.KeyBaseStationStatusNtfy)
 
     private var keyManager: IKeyManager? = null
     private var rcBatterRemaining = 0
     private var stationBatteryRemaining = 0
 
-    private val checkListener = object: CommonCallbacks.KeyListener<DroneSystemStateLFNtfyBean> {
-        override fun onValueChange(oldValue: DroneSystemStateLFNtfyBean?, newValue: DroneSystemStateLFNtfyBean) {
-            if (AutoCheckStateEnum.AUTO_CHECK_FINISH == newValue.autoCheckState) {
-                getCheckResult()
-            }
-        }
-    }
 
     private val stationStatusListener = object: CommonCallbacks.KeyListener<WifiBaseStationStatusNtfyBean> {
         override fun onValueChange(oldValue: WifiBaseStationStatusNtfyBean?, newValue: WifiBaseStationStatusNtfyBean) {
@@ -59,32 +52,34 @@ class PreFlightCheckHelper(private val context: Context, private val onResult: (
 
     init {
         keyManager = DeviceManager.getDeviceManager().getFirstDroneDevice()?.getKeyManager()
-        keyManager?.listen(keyLFNtfy, checkListener)
         keyManager?.listen(stationStatusNtfy, stationStatusListener)
 
         val filter = IntentFilter()
         filter.addAction(Intent.ACTION_BATTERY_CHANGED)
         context.registerReceiver(batteryReceiver, filter)
-    }
 
-    fun startCheck() {
-        val checkType = AutoCheckTypeEnum.ALL
-        val key = KeyTools.createKey(DFCommonCmdKey.KeyDroneStartAutoCheck)
-        SDKLog.i(TAG, "autoSafeCheck start")
-        keyManager?.performAction(key, checkType, object: CommonCallbacks.CompletionCallbackWithParam<Void> {
-            override fun onSuccess(t: Void?) {
+        AutoCheckManager.setAutoCheckListener(object : AutoCheckListener {
+            override fun onStartCheckSuccess() {
                 SDKLog.i(TAG, "autoSafeCheck Success")
             }
 
-            override fun onFailure(error: IAutelCode, msg: String?) {
-                SDKLog.i(TAG, "autoSafeCheck onFailure code: $error s: $msg")
+            override fun onStartCheckFail(error: IAutelCode) {
+                SDKLog.e(TAG, "autoSafeCheck Fail: $error")
                 onResult(CHECK_FAIL)
+            }
+
+            override fun onAutoCheckResult(result: DFAutoCheckResultBean?) {
+                dealAutoCheckResult(result)
             }
         })
     }
 
+    fun startCheck() {
+        val checkType = AutoCheckTypeEnum.ALL
+        AutoCheckManager.startAutoCheck(checkType)
+    }
+
     fun release() {
-        keyManager?.cancelListen(keyLFNtfy, checkListener)
         keyManager?.cancelListen(stationStatusNtfy, stationStatusListener)
         context.unregisterReceiver(batteryReceiver)
     }
@@ -94,49 +89,39 @@ class PreFlightCheckHelper(private val context: Context, private val onResult: (
          return droneStateData?.flightControlData?.batteryRemainingPower ?: 0
     }
 
-    private fun getCheckResult() {
-        val key = KeyTools.createKey(DFCommonCmdKey.KeyDroneGetAutoCheckResult)
-        keyManager?.performAction(key, null, object: CommonCallbacks.CompletionCallbackWithParam<DFAutoCheckResultBean> {
-            override fun onSuccess(t: DFAutoCheckResultBean?) {
-                SDKLog.d(TAG, "KeyDroneGetAutoCheckResult onSuccess: $t")
-                //all the modules check ok, then check the battery remaining
-                val isCheckOK = t?.isLeftSteerNormal() == true
-                        && t.isRightSteerNormal()
-                        && t.isBehindSteerNormal()
-                        && t.isAirSpeedNormal()
-                        && t.isImu1Normal()
-                        && t.isImu2Normal()
-                        && (t.isGPSNormal() || t.isRTKNormal())
-                        && t.isMagnetometer1normal()
-                        && t.isMagnetometer2normal()
-                        && t.isUltrasonicNormal()
-                        && t.isBarometerNormal()
-                        && t.isBatteryNormal()
-                        && t.isGimbalNormal()
-                        && t.isRemoteControllerNormal()
-                        && t.isFontMotorNormal()
-                        && t.isLeftMotorNormal()
-                        && t.isRightMotorNormal()
-                        && t.isBehindMotorNormal()
-                        && t.isPayloadNormal()
-                        && t.isAttitudeNormal()
-                        && t.isRTKHeadingNormal()
-                        && t.isNavigationAttitudeNormal()
-                        && t.isMaintenancReminder()
-                        && t.isVersionMatching()
-                        && t.isElectronicFenceNormal()
-                        && t.isNavigationAndRTKNormal()
-                        //battery remaining check
-                        && rcBatterRemaining >= 15
-                        && stationBatteryRemaining >= 15
-                        && getDroneBatterRemain() >= 15
-
-                onResult(if (isCheckOK) CHECK_SUCCESS else CHECK_FAIL)
-            }
-
-            override fun onFailure(error: IAutelCode, msg: String?) {
-                SDKLog.d(TAG, "KeyDroneGetAutoCheckResult onFailure code: $error s: $msg")
-            }
-        })
+    private fun dealAutoCheckResult(t: DFAutoCheckResultBean?) {
+        SDKLog.d(TAG, "KeyDroneGetAutoCheckResult onSuccess: $t")
+        //all the modules check ok, then check the battery remaining
+        val isCheckOK = t?.isLeftSteerNormal() == true
+                && t.isRightSteerNormal()
+                && t.isBehindSteerNormal()
+                && t.isAirSpeedNormal()
+                && t.isImu1Normal()
+                && t.isImu2Normal()
+                && (t.isGPSNormal() || t.isRTKNormal())
+                && t.isMagnetometer1normal()
+                && t.isMagnetometer2normal()
+                && t.isUltrasonicNormal()
+                && t.isBarometerNormal()
+                && t.isBatteryNormal()
+                && t.isGimbalNormal()
+                && t.isRemoteControllerNormal()
+                && t.isFontMotorNormal()
+                && t.isLeftMotorNormal()
+                && t.isRightMotorNormal()
+                && t.isBehindMotorNormal()
+                && t.isPayloadNormal()
+                && t.isAttitudeNormal()
+                && t.isRTKHeadingNormal()
+                && t.isNavigationAttitudeNormal()
+                && t.isMaintenancReminder()
+                && t.isVersionMatching()
+                && t.isElectronicFenceNormal()
+                && t.isNavigationAndRTKNormal()
+                //battery remaining check
+                && rcBatterRemaining >= 15
+                && stationBatteryRemaining >= 15
+                && getDroneBatterRemain() >= 15
+        onResult(if (isCheckOK) CHECK_SUCCESS else CHECK_FAIL)
     }
 }

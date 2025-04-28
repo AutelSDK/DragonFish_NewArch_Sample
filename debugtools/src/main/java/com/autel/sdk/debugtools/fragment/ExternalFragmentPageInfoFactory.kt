@@ -48,7 +48,7 @@ class ExternalFragmentPageInfoFactory : IFragmentPageInfoFactory {
         )
         val avCenter = ArrayList<FragmentPageInfoItem.InnerFragmentPageInfoItem>()
         avCenter.add(multiDecoder)
-        avCenter.add(surfaceVideo)
+        //avCenter.add(surfaceVideo)
         avCenter.add(rtmpPage)
         avCenter.add(rtspPage)
         avCenter.add(gb28181Page)
