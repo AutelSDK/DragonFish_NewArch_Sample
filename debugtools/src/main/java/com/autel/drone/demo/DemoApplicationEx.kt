@@ -6,6 +6,7 @@ import android.util.Log
 import com.autel.drone.sdk.vmodelx.SDKInitConfig
 import com.autel.drone.sdk.vmodelx.SDKManager
 import com.autel.drone.sdk.vmodelx.interfaces.IAutelLog
+import com.autel.drone.sdk.vmodelx.manager.FrequencyBandManager
 import com.autel.sdk.df.wifimanager.BetaWifiManager
 import com.autel.sdk.df.wifimanager.IBetaWifiListener
 import com.autel.sdk.df.wifimanager.WifiResultBean
@@ -64,7 +65,7 @@ class DemoApplicationEx : Application() {
              * true : single mode , false: mesh mode
              * can auto config when sdk initialize, if not success ,you can manually config
              */
-            single = null  //false , if single is null will auto check mode
+            single = false //, //if single is null will auto check mode
 
             /**
              * Whether DragonFish WiFi base station is supported
@@ -80,6 +81,7 @@ class DemoApplicationEx : Application() {
         SDKManager.get().init(applicationContext, sdkInitConfig)
         initWifiBaseStation()
         println("SDKManager V=${SDKManager.get().getSDKVersion()}")
+        FrequencyBandManager.get()
     }
 
     /**

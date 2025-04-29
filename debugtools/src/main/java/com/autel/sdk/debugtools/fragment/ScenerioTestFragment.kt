@@ -322,7 +322,7 @@ open class ScenerioTestFragment : AutelFragment(), IMTestClickListener,
         scenarioVM.calibrationStatus.observe(viewLifecycleOwner) {
             if (it != CalibrationEventEnum.UNKNOWN) {
                 when (it) {
-                    CalibrationEventEnum.START -> {
+                    CalibrationEventEnum.START, CalibrationEventEnum.CALCULATE -> {
                         addToLogView(getString(R.string.debug_gimbal_calibration_started))
                     }
 

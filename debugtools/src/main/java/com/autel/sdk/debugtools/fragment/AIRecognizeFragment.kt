@@ -43,8 +43,10 @@ class AIRecognizeFragment : AutelFragment() {
     private val trackListener = object : CommonCallbacks.KeyListener<DetectTrackNotifyBean> {
         override fun onValueChange(oldValue: DetectTrackNotifyBean?, newValue: DetectTrackNotifyBean) {
             val drone = DeviceManager.getDeviceManager().getFirstDroneDevice()
+            val status = drone?.getDeviceStateData()?.flightControlData?.aiEnableFunc
             val builder = StringBuilder()
-            if (drone?.getDeviceStateData()?.flightControlData?.aiEnableFunc == AiServiceStatueEnum.AI_RECOGNITION) {
+            SDKLog.d(TAG, "onValueChange newValue:$newValue status: $status")
+            if (status == AiServiceStatueEnum.AI_RECOGNITION || status == AiServiceStatueEnum.INTELLIGENT_TRACKING) {
                 builder.append("timestamp: ${newValue.timestamp} lensId:${newValue.lensId} objNum:${newValue.objNum}\n")
                 newValue.infoList.forEach {
                     val type = DetectTargetEnum.getEnglishName(DetectTargetEnum.findEnum(it.type))
@@ -86,7 +88,7 @@ class AIRecognizeFragment : AutelFragment() {
         }
 
         binding.btnStartLock.setOnClickListener {
-            if (isRunning) return@setOnClickListener
+            if (!isRunning) return@setOnClickListener
             if (isLocking) {
                 stopTargetLock()
                 binding.btnStartLock.text = getString(R.string.debug_target_lock)

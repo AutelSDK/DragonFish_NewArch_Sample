@@ -16,6 +16,8 @@ import com.autel.drone.sdk.vmodelx.manager.DeviceManager
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.callback.CommonCallbacks
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.GimbalKey
 import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.base.KeyTools
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.key.dragonfish.DFFlightControlKey
+import com.autel.drone.sdk.vmodelx.manager.keyvalue.value.dragonfish.bean.DFTargetInfoBean
 import com.autel.drone.sdk.vmodelx.module.camera.bean.LensTypeEnum
 import com.autel.player.player.autelplayer.AutelPlayer
 import com.autel.player.player.autelplayer.AutelPlayerView
@@ -40,6 +42,14 @@ class LidarRangingFragment : AutelFragment() {
                     updateResult()
                 }
             }
+        }
+    }
+
+    private var targetBean: DFTargetInfoBean? = null
+    private val keyTargetInfoNtfy = KeyTools.createKey(DFFlightControlKey.KeyTargetInfoNtfy)
+    private val targetListener = object: CommonCallbacks.KeyListener<DFTargetInfoBean> {
+        override fun onValueChange(oldValue: DFTargetInfoBean?, newValue: DFTargetInfoBean) {
+            targetBean = newValue
         }
     }
 
@@ -73,8 +83,7 @@ class LidarRangingFragment : AutelFragment() {
 
         //get current status
         val keyManager = DeviceManager.getDeviceManager().getFirstDroneDevice()?.getKeyManager()
-        keyManager?.getValue(
-            lidarKey,
+        keyManager?.getValue(lidarKey,
             object : CommonCallbacks.CompletionCallbackWithParam<Boolean> {
                 override fun onSuccess(t: Boolean?) {
                     isRunning = t ?: false
@@ -94,28 +103,43 @@ class LidarRangingFragment : AutelFragment() {
             binding.tvResult.isVisible = isRunning
         }
         if (isRunning) {
+            DeviceManager.getDeviceManager().getFirstDroneDevice()?.getKeyManager()?.listen(keyTargetInfoNtfy, targetListener)
             handler.sendEmptyMessage(MSG_UPDATE_RESULT)
         } else {
             handler.removeMessages(MSG_UPDATE_RESULT)
+            DeviceManager.getDeviceManager().getFirstDroneDevice()?.getKeyManager()?.cancelListen(keyTargetInfoNtfy, targetListener)
         }
     }
 
     private fun updateResult() {
-        val data = DeviceManager.getDeviceManager().getFirstDroneDevice()
-            ?.getDeviceStateData()?.flightControlData
-        if (data?.laserDistanceIsValid == true) {
-            binding.tvResult.text = "Distance: ${data.laserDistance / 100.0}m"
+        val builder = StringBuilder()
+        if (targetBean?.distanceValid == 1) {
+            builder.append("Distance: ${targetBean?.distance}m, ")
         } else {
-            binding.tvResult.text = "Distance: N/A"
+            builder.append("Distance: N/A, ")
         }
+        if (targetBean?.speedValid == 1) {
+            builder.append("Speed: ${targetBean?.speed}m/s\n")
+        } else {
+            builder.append("Speed: N/A\n")
+        }
+        if (targetBean?.posValid == 1) {
+            builder.append("Latitude: ${targetBean?.latitude}°, Longitude: ${targetBean?.longitude}, Altitude: ${targetBean?.altitude}")
+        } else {
+            builder.append("Latitude: N/A, Longitude: N/A, Altitude: N/A")
+        }
+
+        binding.tvResult.text = builder.toString()
         handler.sendEmptyMessageDelayed(MSG_UPDATE_RESULT, 1000)
     }
 
     private fun initPlayer() {
         val codecView = createAutelCodecView()
         binding.layoutVideo.addView(codecView)
-
-        val channelId = getChannelId(LensTypeEnum.Zoom)
+        val drone = DeviceManager.getDeviceManager().getFirstDroneDevice()
+        val lens = drone?.getAbilitySetManager()?.getCameraAbilitySetManager()?.getLensList(drone.getGimbalDeviceType()) ?: emptyList()
+        val lensType = if (lens.contains(LensTypeEnum.WideAngle)) LensTypeEnum.WideAngle else LensTypeEnum.Zoom
+        val channelId = getChannelId(lensType)
         autelPlayer = AutelPlayer(channelId)
         autelPlayer?.addVideoView(codecView)
     }
@@ -147,6 +171,8 @@ class LidarRangingFragment : AutelFragment() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+
+        DeviceManager.getDeviceManager().getFirstDroneDevice()?.getKeyManager()?.cancelListen(keyTargetInfoNtfy, targetListener)
 
         autelPlayer?.removeVideoView()
         autelPlayer?.releasePlayer()
