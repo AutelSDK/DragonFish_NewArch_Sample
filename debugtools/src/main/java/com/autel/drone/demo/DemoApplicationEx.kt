@@ -81,7 +81,6 @@ class DemoApplicationEx : Application() {
         SDKManager.get().init(applicationContext, sdkInitConfig)
         initWifiBaseStation()
         println("SDKManager V=${SDKManager.get().getSDKVersion()}")
-        FrequencyBandManager.get()
     }
 
     /**
